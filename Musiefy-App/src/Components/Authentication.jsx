@@ -16,14 +16,28 @@ function Authentication({}, ref){
             }
         }
     })
+
+    function handleInput(event){
+        const {name, value} = event.target;
+        setAuthenticationInfo((prevValue)=>{
+            return{
+                ...prevValue,
+                [name] : value,
+                isLoggedIn : true,
+            }
+        })
+    }
+    function handleForm(event){
+        console.log(authenticationInfo)
+    }
     
     return createPortal(
         <dialog ref={dialogRef} className='bg-slate-500 max-w-[500px] w-full p-5 rounded-md'>
-            <form method="dialog" className="flex flex-col">
+            <form method="dialog" onSubmit={(e)=>handleForm(e)} className="flex flex-col">
                 <h1 className="text-2xl capitalize text-center font-semibold mb-4">Sign up to start listening</h1>
-                <Input label='User Name' type='text'/>
-                <Input label='Email' type='email' placeholder='abc@gmail.com'/>
-                <Input label='Password' type='password'/>
+                <Input label='User Name' type='text' name='userName' onChange={handleInput}/>
+                <Input label='Email' type='email' placeholder='abc@gmail.com' name='email' onChange={handleInput}/>
+                <Input label='Password' type='password' name='password' onChange={handleInput}/>
                 <button type="submit" className="self-end px-5 py-2 rounded-md mt-4 hover:bg-slate-300 hover:font-semibold">Sign up</button>
             </form>
         </dialog>, document.getElementById('authentication-modal')
