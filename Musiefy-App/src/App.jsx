@@ -7,7 +7,6 @@ import { authenticationContext } from './ContextStore/Authentication-Context'
 function App() {
 const modal = useRef()
 const {authenticationInfo, setAuthenticationInfo} = useContext(authenticationContext)
-console.log(authenticationInfo)
 
 function handleSignUp(){
   modal.current.openForm()
@@ -15,8 +14,8 @@ function handleSignUp(){
 
   return (
     <>
-        <Header onSignup={handleSignUp}/>
-        <Authentication ref={modal}/>
+      <Header onSignup={handleSignUp}/>
+      <Authentication ref={modal}/>
     </>
   )
 }
