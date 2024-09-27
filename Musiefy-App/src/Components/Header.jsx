@@ -1,8 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {faHouse, faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
 import NodeImg from "../assets/Node.png"
+import {useContext} from 'react'
+import { authenticationContext } from "../ContextStore/Authentication-Context"
 
-function Header({onSignup}){
+function Header({onSignup, onLogin}){
+    const {authenticationInfo, setAuthenticationInfo} = useContext(authenticationContext)
     return(
         <header className="flex justify-between items-center px-5 py-2">
             <div><img src={NodeImg} alt="header-logo" className="max-w-16 transform transition hover:scale-110 duration-200"/></div>
@@ -14,8 +17,9 @@ function Header({onSignup}){
                 </span>
             </div>
             <div className="flex gap-5">
-                <button className="font-bold text-gray-400 hover:text-slate-100 transform transition hover:scale-105 duration-200" onClick={onSignup}>Sign up</button>
-                <button className="border-none bg-slate-50 rounded-3xl pt-2 pb-3 px-5 text-slate-950 font-bold hover:bg-slate-100 transform transition hover:scale-105 duration-200">Log in</button>
+                {!authenticationInfo.isSignup && <button className="font-bold text-gray-400 hover:text-slate-100 transform transition hover:scale-105 duration-200" onClick={onSignup}>Sign up</button>}
+                {!authenticationInfo.isLoggedIn ? <button className="border-none bg-slate-50 rounded-3xl pt-2 pb-3 px-5 text-slate-950 font-bold hover:bg-slate-100 transform transition hover:scale-105 duration-200" onClick={onLogin}>Log in</button> :
+                <button className="border-none bg-slate-50 rounded-3xl pt-2 pb-3 px-5 text-slate-950 font-bold hover:bg-slate-100 transform transition hover:scale-105 duration-200">Log out</button>}
             </div>
         </header>
     )
