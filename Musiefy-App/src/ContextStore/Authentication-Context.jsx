@@ -8,6 +8,11 @@ export const AuthenticationProvider = ({children}) =>{
         email : '',
         password : '',
         isLoggedIn : false,
+        isSignup : false,
+        signupUsername : '',
+        signupEmail : '',
+        signupPassword : '',
+        profileName: ''
     })
     return(
         <authenticationContext.Provider value={{authenticationInfo, setAuthenticationInfo}}>

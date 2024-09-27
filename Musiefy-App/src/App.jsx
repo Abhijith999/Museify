@@ -11,10 +11,17 @@ const {authenticationInfo, setAuthenticationInfo} = useContext(authenticationCon
 function handleSignUp(){
   modal.current.openForm()
 }
+function handleLogin(){
+  if(authenticationInfo.isSignup){
+    modal.current.openForm()
+  }else{
+    alert('Please signup first')
+  }
+}
 
   return (
     <>
-      <Header onSignup={handleSignUp}/>
+      <Header onSignup={handleSignUp} onLogin={handleLogin}/>
       <Authentication ref={modal}/>
     </>
   )

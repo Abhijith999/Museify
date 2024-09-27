@@ -10,12 +10,6 @@ function Authentication({}, ref){
     const storageKey = 'signupValues'
     const {authenticationInfo, setAuthenticationInfo} = useContext(authenticationContext)
     const [error, setError] = useState({})
-    const [signupValue, setSignupValue] = useState({
-        userName : '',
-        email : '',
-        password : '',
-        isSignup : false,
-    })
 
     // modal opening code
     useImperativeHandle(ref, ()=>{
@@ -40,7 +34,7 @@ function Authentication({}, ref){
     //handling onchange event
     function handleInput(event){
         const {name, value} = event.target;
-        setSignupValue((prevValue)=>{
+        setAuthenticationInfo((prevValue)=>{
             return{
                 ...prevValue,
                 [name] : value,
@@ -52,34 +46,34 @@ function Authentication({}, ref){
     function validate(){
         let errorGroup = {}
 
-        if(signupValue.userName === ''){
+        if(authenticationInfo.signupUsername === ''){
             errorGroup.errorNanme = 'Plese Enter the name'
         }
 
-        if(signupValue.email === ''){
+        {if(authenticationInfo.signupEmail === ''){
             errorGroup.errorEmail = 'Please Enter the email'
         }
-        else if(!/\S+@\S+\.\S+/.test(signupValue.email)){
+        else if(!/\S+@\S+\.\S+/.test(authenticationInfo.signupEmail)){
             errorGroup.errorEmail = 'Invalid Email'
-        }
+        }}
 
-        if(signupValue.password === ''){
+        if(authenticationInfo.signupPassword === ''){
             errorGroup.errorPassword = 'Please Enter the password'
         }
-        else if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(signupValue.password)){
+        else if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(authenticationInfo.signupPassword)){
             errorGroup.errorPassword = 'Please Enter valid password'
         }
         return errorGroup;
     }
 
-    //handling onSubmit form event
+    //handling form onSubmit
     function handleForm(event, key){
         event.preventDefault()
         const validationErrors = validate()
         
         if(Object.keys(validationErrors).length > 0){
             setError(validationErrors)
-            setSignupValue((prevValue)=>{
+            setAuthenticationInfo((prevValue)=>{
                 return{
                     ...prevValue,
                     isSignup : false,
@@ -88,47 +82,61 @@ function Authentication({}, ref){
         }
         else{
             setError({})
-            setSignupValue((prevValue)=>{
+            setAuthenticationInfo((prevValue)=>{
                 return{
                     ...prevValue,
                     isSignup : true,
                 }
             })
-            localStorage.setItem(key, JSON.stringify(signupValue))
-            setSignupValue((prevValue)=>{
+            localStorage.setItem(key, JSON.stringify(authenticationInfo))
+            setAuthenticationInfo((prevValue)=>{
                 return{
                     ...prevValue,
-                    userName : '',
-                    email : '',
-                    password : '',
+                    signupUsername : '',
+                    signupEmail : '',
+                    signupPassword : '',
                 }
             })
-            console.log(signupValue)
         }
     }
 
     //handling login onLogin
     function handleLogin(key){
         const storedObject = JSON.parse(localStorage.getItem(key))
-        if(storedObject.userName === signupValue.userName && storedObject.password === signupValue.password){
-            alert('logged successfully')
+        const validationErrors = validate()
+
+        if(validationErrors.errorNanme || validationErrors.errorPassword){
+            setError(validationErrors)
         }
         else{
-            alert('login failed')
-        }
-        console.log(signupValue)
+            setError({})
+            if(storedObject.signupUsername === authenticationInfo.signupUsername && storedObject.signupPassword === authenticationInfo.signupPassword){
+                alert('logged successfully')
+                setAuthenticationInfo((prevValue)=>{
+                    return{
+                        ...prevValue,
+                        isLoggedIn : true,
+                        profileName : storedObject.signupUsername,
+                    }
+                })
+                closeModal()
+            }
+            else{
+                alert('login failed')
+            }
+        } 
     }
     
     return createPortal(
         <dialog ref={dialogRef} className='bg-slate-500 max-w-[500px] w-full p-5 rounded-md backdrop:bg-stone-900/90'>
             <form method="dialog" onSubmit={(e)=>handleForm(e, storageKey)} className="flex flex-col">
                 <h1 className="text-2xl capitalize text-center font-semibold mb-4">Sign up to start listening</h1>
-                <Input label='User Name' type='text' name='userName' onChange={handleInput} onValidation={error.errorNanme} inputBind={signupValue.userName}/>
-                {!signupValue.isSignup && <Input label='Email' type='email' placeholder='abc@gmail.com' name='email' onChange={handleInput} onValidation={error.errorEmail} inputBind={signupValue.email}/>}
-                <Input label='Password' type='password' name='password' onChange={handleInput} onValidation={error.errorPassword} inputBind={signupValue.password}/>
+                <Input label='User Name' type='text' name='signupUsername' onChange={handleInput} onValidation={error.errorNanme} inputBind={authenticationInfo.signupUsername}/>
+                {!authenticationInfo.isSignup && <Input label='Email' type='email' placeholder='abc@gmail.com' name='signupEmail' onChange={handleInput} onValidation={error.errorEmail} inputBind={authenticationInfo.signupEmail}/>}
+                <Input label='Password' type='password' name='signupPassword' onChange={handleInput} onValidation={error.errorPassword} inputBind={authenticationInfo.signupPassword}/>
                 <div className="flex justify-end">
                 <button type="button" className="self-end px-5 py-2 rounded-md mt-4 hover:bg-slate-300 hover:font-semibold" onClick={cancelModal}>Cancel</button>
-                {signupValue.isSignup ? <button type="button" className="self-end px-5 py-2 rounded-md mt-4 hover:bg-slate-300 hover:font-semibold" onClick={()=>handleLogin(storageKey)}>Login</button> :
+                {authenticationInfo.isSignup ? <button type="button" className="self-end px-5 py-2 rounded-md mt-4 hover:bg-slate-300 hover:font-semibold" onClick={()=>handleLogin(storageKey)}>Login</button> :
                 <button type="submit" className="self-end px-5 py-2 rounded-md mt-4 hover:bg-slate-300 hover:font-semibold">Sign up</button>}
                 </div>
             </form>
