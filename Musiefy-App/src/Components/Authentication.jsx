@@ -117,6 +117,8 @@ function Authentication({}, ref){
                         ...prevValue,
                         isLoggedIn : true,
                         profileName : storedObject.signupUsername,
+                        signupUsername : '',
+                        signupPassword : '',
                     }
                 })
                 closeModal()
