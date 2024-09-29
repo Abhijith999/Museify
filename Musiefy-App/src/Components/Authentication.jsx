@@ -132,7 +132,7 @@ function Authentication({}, ref){
     return createPortal(
         <dialog ref={dialogRef} className='bg-slate-500 max-w-[500px] w-full p-5 rounded-md backdrop:bg-stone-900/90'>
             <form method="dialog" onSubmit={(e)=>handleForm(e, storageKey)} className="flex flex-col">
-                <h1 className="text-2xl capitalize text-center font-semibold mb-4">Sign up to start listening</h1>
+                <h1 className="text-2xl capitalize text-center font-semibold mb-4">{authenticationInfo.isSignup ? 'Login' : 'Sign up to start listening'}</h1>
                 <Input label='User Name' type='text' name='signupUsername' onChange={handleInput} onValidation={error.errorNanme} inputBind={authenticationInfo.signupUsername}/>
                 {!authenticationInfo.isSignup && <Input label='Email' type='email' placeholder='abc@gmail.com' name='signupEmail' onChange={handleInput} onValidation={error.errorEmail} inputBind={authenticationInfo.signupEmail}/>}
                 <Input label='Password' type='password' name='signupPassword' onChange={handleInput} onValidation={error.errorPassword} inputBind={authenticationInfo.signupPassword}/>

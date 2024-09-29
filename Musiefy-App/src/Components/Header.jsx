@@ -27,7 +27,7 @@ function Header({onSignup, onLogin}){
                 </span>
             </div>
             <div className="flex gap-5 items-center">
-                {authenticationInfo.isLoggedIn ? <span className="bg-zinc-800 w-10 aspect-square rounded-full text-gray-400 hover:text-gray-200 grid place-content-center">{authenticationInfo.profileName.charAt(0).toUpperCase()}</span> : <span className="bg-zinc-800 w-10 aspect-square rounded-full text-gray-400 hover:text-gray-200 grid place-content-center"><FontAwesomeIcon icon={faUser}/></span>}
+                {authenticationInfo.isLoggedIn ? <span className="bg-zinc-800 w-10 aspect-square rounded-full text-gray-400 hover:text-gray-200 grid place-content-center font-semibold">{authenticationInfo.profileName.charAt(0).toUpperCase()}</span> : <span className="bg-zinc-800 w-10 aspect-square rounded-full text-gray-400 hover:text-gray-200 grid place-content-center"><FontAwesomeIcon icon={faUser}/></span>}
                 {!authenticationInfo.isSignup && <button className="font-bold text-gray-400 hover:text-slate-100 transform transition hover:scale-105 duration-200" onClick={onSignup}>Sign up</button>}
                 {!authenticationInfo.isLoggedIn ? <button className="border-none bg-slate-50 rounded-3xl pt-2 pb-3 px-5 text-slate-950 font-bold hover:bg-slate-100 transform transition hover:scale-105 duration-200" onClick={onLogin}>Log in</button> :
                 <button className="border-none bg-slate-50 rounded-3xl pt-2 pb-3 px-5 text-slate-950 font-bold hover:bg-slate-100 transform transition hover:scale-105 duration-200" onClick={handleLogout}>Log out</button>}
